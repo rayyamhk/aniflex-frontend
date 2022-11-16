@@ -1,0 +1,22 @@
+.video-wrapper {
+  position: relative;
+  z-index: 0; /* hack to show the halo */
+}
+
+.video-wrapper video {
+  width: 100%;
+  display: block; /* remove the gap in the bottom */
+}
+
+.halo::before {
+  content: '';
+  display: block;
+  position: absolute;
+  border-radius: 9999px;
+  z-index: -100;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  box-shadow: 0px 0px 9999px 30px rgb(255 255 255 / 15%)
+}

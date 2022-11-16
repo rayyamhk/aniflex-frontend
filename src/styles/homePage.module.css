@@ -1,0 +1,28 @@
+.title {
+  color: var(--text-primary);
+  font-size: 1.5rem;
+}
+
+.popular-videos-container {
+  display: grid;
+  grid-template-columns: repeat(1, 1fr);
+  gap: 10px;
+}
+
+@media screen and (min-width: 600px) {
+  .popular-videos-container {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media screen and (min-width: 900px) {
+  .popular-videos-container {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media screen and (min-width: 1200px) {
+  .popular-videos-container {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}

@@ -1,0 +1,45 @@
+.container {
+  background-color: var(--paper-1);
+  border-radius: 5px;
+  overflow: hidden;
+  position: relative;
+}
+
+.thumbnail {
+  padding-bottom: 56.25%;
+}
+
+.video-info {
+  padding: 20px 10px 20px 10px;
+}
+
+.video-info h5 {
+  color: var(--text-primary);
+  font-size: 1rem;
+  font-weight: 400;
+  margin: 0;
+  margin-bottom: 8px;
+}
+
+.video-info time {
+  color: var(--text-secondary);
+  font-size: 0.75rem;
+  display: block;
+}
+
+.numbers {
+  position: absolute;
+  font-size: 0.75rem;
+  bottom: 20px;
+  right: 10px;
+}
+
+.numbers .views {
+  color: var(--text-secondary);
+  display: flex;
+  align-items: center;
+}
+
+.numbers .views svg {
+  margin-right: 5px;
+}

@@ -1,0 +1,17 @@
+:root {
+
+}
+
+.dark-theme {
+  --text-primary: rgba(238, 238, 238, 1);
+  --text-secondary: rgba(238, 238, 238, 0.7);
+  --background: rgba(18, 18, 18, 1);
+  --paper-1: rgba(238, 238, 238, 0.15);
+  --paper-2: rgba(238, 238, 238, 0.3);
+
+  --placeholder: rgba(238, 238, 238, 0.1);
+}
+
+.light-theme {
+
+}

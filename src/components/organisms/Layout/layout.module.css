@@ -1,0 +1,4 @@
+.container {
+  background-color: var(--background);
+  padding-top: calc(70px + 10px); /* header height */
+}

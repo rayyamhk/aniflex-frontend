@@ -10,6 +10,8 @@ type ThumbnailProps = {
   height?: number,
   alt: string,
   priority?: boolean,
+  fill?: boolean,
+  sizes?: string,
 };
 
 export default function Thumbnail(props: ThumbnailProps) {
@@ -21,6 +23,8 @@ export default function Thumbnail(props: ThumbnailProps) {
     height,
     alt,
     priority = false,
+    fill = false,
+    sizes,
   } = props;
 
   const css = useStyle(styles);
@@ -33,9 +37,11 @@ export default function Thumbnail(props: ThumbnailProps) {
         alt={alt}
         width={width}
         height={height}
-        fill={width && height ? false : true}
-        sizes={width && height ? undefined : "100vw"}
+        fill={fill}
+        sizes={sizes}
         priority={priority}
+        placeholder='blur'
+        blurDataURL='data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mN8/frJfwAJPgO7v0heZQAAAABJRU5ErkJggg=='
       />
       {label ? <span className={css('label')}>{label}</span> : null}
     </div>

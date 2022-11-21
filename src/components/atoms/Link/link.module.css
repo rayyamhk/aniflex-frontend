@@ -4,3 +4,8 @@
 .link:active {
   text-decoration: none;
 }
+
+.hover:hover {
+  text-decoration: underline;
+  text-decoration-color: inherit;
+}

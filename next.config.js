@@ -11,6 +11,7 @@ const nextConfig = {
         hostname: apiHost.hostname,
       }
     ],
+    deviceSizes: [600, 900, 1200],
   },
 }
 

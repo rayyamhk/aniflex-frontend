@@ -11,19 +11,21 @@
     "test:watch": "jest --watch"
   },
   "dependencies": {
-    "@next/font": "^13.0.2",
+    "@next/font": "^13.0.4",
     "@types/node": "18.11.9",
     "@types/react": "18.0.25",
     "@types/react-dom": "18.0.8",
-    "dashjs": "^4.5.0",
+    "@types/video.js": "^7.3.49",
     "eslint": "8.27.0",
     "eslint-config-next": "13.0.2",
     "next": "13.0.2",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-icons": "^4.6.0",
+    "react-player": "^2.11.0",
     "swiper": "^8.4.4",
-    "typescript": "4.8.4"
+    "typescript": "4.8.4",
+    "video.js": "^7.20.3"
   },
   "devDependencies": {
     "@testing-library/jest-dom": "^5.16.5",

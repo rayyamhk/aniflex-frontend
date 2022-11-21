@@ -1,3 +1,8 @@
+.grid {
+  --video-player-height-lg: 489.38px;
+  --video-player-height-md: 320.63px;
+}
+
 .video-info {
   margin-top: 10px;
 }
@@ -80,7 +85,7 @@
     display: grid;
     column-gap: 10px;
     grid-template-columns: 1fr 300px;
-    grid-template-rows: 320.63px 1fr;
+    grid-template-rows: var(--video-player-height-md) 1fr;
   }
 
   .video-wrapper {
@@ -100,7 +105,7 @@
   }
 
   .episodes-wrapper ol {
-    max-height: calc(320.63px + 300px);
+    max-height: calc(var(--video-player-height-md) + 300px);
   }
 
   .popular-videos-container {
@@ -110,11 +115,11 @@
 
 @media screen and (min-width: 1200px) {
   .grid {
-    grid-template-rows: 489.38px 1fr;
+    grid-template-rows: var(--video-player-height-lg) 1fr;
   }
 
   .episodes-wrapper ol {
-    max-height: calc(489.38px + 300px);
+    max-height: calc(var(--video-player-height-lg) + 300px);
   }
 
   .popular-videos-container {

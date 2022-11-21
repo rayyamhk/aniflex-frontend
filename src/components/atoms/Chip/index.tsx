@@ -14,6 +14,7 @@ export default function Chip({ className, children, path }: ChipProps) {
   return (
     <Link
       className={css('wrapper', className)}
+      hover
       href={{
         pathname: path,
       }}

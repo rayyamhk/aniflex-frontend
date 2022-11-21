@@ -47,7 +47,7 @@ export default function AnimePage(props: AnimePageProps) {
     fetchPopularSeries();
     async function fetchPopularSeries() {
       try {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_API_HOST}/videos/series?limit=8`);
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_HOST}/series?limit=8`);
         const json = await res.json() as Response;
         if (json.status !== 'success') return;
         const series = json.data as Serie[];
@@ -118,6 +118,8 @@ export default function AnimePage(props: AnimePageProps) {
       />
       <div className={css('responsive', 'grid')}>
         <VideoPlayer
+          id={id}
+          episode={episode}
           className={css('video-wrapper')}
           halo
           video={videoSrc}
@@ -145,7 +147,12 @@ export default function AnimePage(props: AnimePageProps) {
 }
 
 export async function getStaticPaths() {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_API_HOST}/videos/metadata/episodes`);
+  if (!process.env.API_KEY) {
+    throw new Error('Missing API key.');
+  }
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API_HOST}/episodes`, {
+    headers: { 'x-api-key': process.env.API_KEY },
+  });
   const json = await res.json();
   if (json.status !== 'success') throw new Error(json.message);
   const episodes = json.data as any[];
@@ -163,28 +170,32 @@ export async function getStaticPaths() {
 export async function getStaticProps(context: any) {
   const id = context.params?.id;
   const episode = Number(context.params?.episode);
-  const res = await fetch(`${process.env.NEXT_PUBLIC_API_HOST}/videos/metadata/episodes/${id}?episode=${episode}`);
-  const json = await res.json();
-  if (json.status !== 'success') throw new Error(json.message);
-  const metadata = json.data;
-  const episodes = metadata.episodes.map((item: any) => ({
-    ...item,
-    thumbnail: `${process.env.NEXT_PUBLIC_API_HOST}${item.thumbnail}`,
-    video: `${process.env.NEXT_PUBLIC_API_HOST}${item.video}`,
+  const episodeRes = await fetch(`${process.env.NEXT_PUBLIC_API_HOST}/episodes/${id}`);
+  const episodeBody = await episodeRes.json();
+  if (episodeBody.status !== 'success') throw new Error(episodeBody.message);
+  const episodes = episodeBody.data.map((episode: any) => ({
+    ...episode,
+    video: `${process.env.NEXT_PUBLIC_API_HOST}${episode.video}`,
+    thumbnail: `${process.env.NEXT_PUBLIC_API_HOST}${episode.thumbnail}`,
   }));
   const currentEpisode = episodes.find((item: any) => item.episode === episode);
+
+  const serieRes = await fetch(`${process.env.NEXT_PUBLIC_API_HOST}/series/${id}`);
+  const serieBody = await serieRes.json();
+  if (serieBody.status !== 'success') throw new Error(serieBody.message);
+  const serie = serieBody.data;
   return {
     props: {
       id,
       episode,
-      serieTitle: metadata.title,
+      serieTitle: serie.title,
       episodeTitle: currentEpisode.title,
-      description: metadata.description,
+      description: serie.description,
       views: currentEpisode.views,
       publishedAt: currentEpisode.publishedAt,
       videoSrc: currentEpisode.video,
       videoThumbnailSrc: currentEpisode.thumbnail,
-      tags: metadata.tags,
+      tags: serie.tags,
       episodes,
     },
   };

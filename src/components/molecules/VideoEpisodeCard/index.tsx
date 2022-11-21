@@ -1,14 +1,7 @@
-import { MdOutlineRemoveRedEye } from 'react-icons/md';
 import Link from '../../atoms/Link';
 import useStyle from '../../../hooks/useStyles';
 import styles from './videoEpisodeCard.module.css';
 import Thumbnail from '../../atoms/Thumbnail';
-
-/**
- * TODOs:
- * Add Image alt text
- * Add Image sizes props
- */
 
 type VideoCardProps = {
   id: string,
@@ -58,7 +51,6 @@ export default function VideoEpisodeCard(props: VideoCardProps) {
           <time dateTime={publishedAt}>{`${yyyy}.${mm}.${dd}`}</time>
           <h5 className={css('title')}>{title}</h5>
           <span className={css('views')}>
-            <MdOutlineRemoveRedEye />
             {views}
           </span>
         </div>

@@ -42,10 +42,15 @@ export default function VideoCard(props: VideoCardProps) {
           label={`共${episodes}集`}
           thumbnail={thumbnail}
           alt={`${title}縮圖`}
+          fill
+          sizes="
+            (min-width: 600px) 283.75px,
+            600px
+          "
         />
       </Link>
       <div className={css('video-info')}>
-        <Link href={hrefOptions}>
+        <Link hover href={hrefOptions}>
           <h5>{title}</h5>
         </Link>
         <time dateTime={publishedAt}>{new Date(publishedAt).getFullYear()}</time>

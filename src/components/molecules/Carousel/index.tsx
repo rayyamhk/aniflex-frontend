@@ -1,4 +1,4 @@
-import Image from 'next/image';
+import Image, { StaticImageData } from 'next/image';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Pagination, Autoplay, Navigation } from 'swiper';
 import 'swiper/css';
@@ -9,7 +9,7 @@ import styles from './carousel.module.css';
 
 type CarouselType = {
   className?: string,
-  imgUrls: string[];
+  imgs: (string|StaticImageData)[];
 };
 
 export default function Carousel(props: CarouselType) {
@@ -28,13 +28,15 @@ export default function Carousel(props: CarouselType) {
       }}
       modules={[Pagination, Navigation, Autoplay]}
     >
-      {props.imgUrls.map((url, idx) => (
+      {props.imgs.map((src, idx) => (
         <SwiperSlide className={css('wrapper', props.className)} key={idx}>
           <Image
-            src={url}
-            alt=""
+            src={src}
+            alt=''
             fill
-            sizes="100vw"
+            sizes='100vw'
+            placeholder='blur'
+            className={css('img')}
           />
         </SwiperSlide>
       ))}

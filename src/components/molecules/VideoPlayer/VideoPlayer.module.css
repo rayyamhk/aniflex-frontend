@@ -3,11 +3,6 @@
   z-index: 0; /* hack to show the halo */
 }
 
-.video-wrapper video {
-  width: 100%;
-  display: block; /* remove the gap in the bottom */
-}
-
 .halo::before {
   content: '';
   display: block;

@@ -6,6 +6,10 @@ import useStyle from '../hooks/useStyles';
 import styles from '../styles/homePage.module.css'
 import { Serie } from '../types/Serie';
 
+import hero0 from '../static/images/hero-0.jpeg';
+import hero1 from '../static/images/hero-1.jpeg';
+import hero2 from '../static/images/hero-2.jpeg';
+
 type HomeProps = {
   popularSeries: Serie[],
 };
@@ -25,10 +29,10 @@ export default function Home(props: HomeProps) {
       />
       <section className={css('responsive')}>
         <Carousel
-          imgUrls={[
-            '/hero-0.jpeg',
-            '/hero-1.jpeg',
-            '/hero-2.jpeg',
+          imgs={[
+            hero0,
+            hero1,
+            hero2,
           ]}
         />
       </section>
@@ -43,7 +47,12 @@ export default function Home(props: HomeProps) {
 }
 
 export async function getServerSideProps() {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_API_HOST}/videos/series?limit=8`);
+  if (!process.env.API_KEY) {
+    throw new Error('Missing API key.');
+  }
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API_HOST}/series?limit=8`, {
+    headers: { 'x-api-key': process.env.API_KEY },
+  });
   const json = await res.json();
   const series = json.data.map((item: any) => ({
     ...item,

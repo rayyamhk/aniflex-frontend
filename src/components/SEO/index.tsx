@@ -20,7 +20,7 @@ export default function SEO(props: SEOProps) {
       <title>{title}</title>
       <meta name='description' content={description} />
       {keywords ? <meta name='keywords' content={keywords} /> : null}
-      <link rel='canonical' href='' />
+      {/* <link rel='canonical' href='' /> */}
       <meta property='og:title' content={title} />
       <meta property='og:description' content={description} />
       {image ? <meta property='og:image' content={image} /> : null}

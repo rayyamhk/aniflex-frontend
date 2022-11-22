@@ -5,6 +5,7 @@ const theme = createTheme({
     mode: 'dark'
   },
   typography: {
+    fontFamily: '"Helvetica", "Arial", sans-serif',
     h1: {
       fontSize: '2rem',
       fontWeight: 700,

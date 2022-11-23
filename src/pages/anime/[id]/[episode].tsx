@@ -85,7 +85,7 @@ export default function AnimePage(props: AnimePageProps) {
         const json = await res.json() as Response;
         if (json.status !== 'success') return;
         const series = json.data as Serie[];
-        setPopularSeries(series);
+        setPopularSeries([...series, ...series, ...series, ...series]);
       } catch (err) {
         console.error(err);
       } finally {
@@ -99,7 +99,7 @@ export default function AnimePage(props: AnimePageProps) {
   const renderTags = () => {
     if (!tags) return null;
     return (
-      <Box sx={{ mt: 1 }}>
+      <Box sx={{ mt: 2 }}>
         {tags.map((tag, pos) => (
           <Link
             key={pos}
@@ -257,7 +257,7 @@ export async function getStaticProps(context: any) {
         publishedAt: currentEpisode.publishedAt,
         videoSrc: currentEpisode.video,
         videoThumbnailSrc: currentEpisode.thumbnail,
-        tags: serie.tags,
+        tags: serie.tags || [],
         episodes: formattedEpisoded,
       },
     };
@@ -281,8 +281,8 @@ function PopularSeries({ loading, series }: { loading: boolean, series: Serie[] 
   if (series.length > 0) {
     return (
       <Grid container spacing={2}>
-        {series.map((serie) => (
-          <Grid item xs={12} sm={6} md={4} lg={3} key={serie.id}>
+        {series.map((serie, i) => (
+          <Grid item xs={12} sm={6} md={4} lg={3} key={i}>
             <VideoCard
               {...serie}
               thumbnail={`${process.env.NEXT_PUBLIC_API_HOST}${serie.thumbnail}`}

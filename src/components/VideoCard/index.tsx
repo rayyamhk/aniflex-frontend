@@ -1,3 +1,4 @@
+import { useContext } from 'react';
 import Card from '@mui/material/Card';
 import CardActionArea from '@mui/material/CardActionArea';
 import CardContent from '@mui/material/CardContent';
@@ -6,6 +7,7 @@ import { styled } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
 import Link from '../Link';
 import Thumbnail from '../Thumbnail';
+import { ThemeContext } from '../../mui/themeProvider';
 
 type VideoCardProps = {
   id: string,
@@ -47,8 +49,14 @@ export default function VideoCard(props: VideoCardProps) {
     },
   };
 
+  const [theme] = useContext(ThemeContext);
+  const isDarkMode = theme === 'dark';
+
   return (
-    <Card elevation={3}>
+    <Card
+      elevation={isDarkMode ? 3 : 0}
+      variant={isDarkMode ? 'elevation' : 'outlined'}
+    >
       <CardActionArea>
         <Link
           href={hrefOptions}

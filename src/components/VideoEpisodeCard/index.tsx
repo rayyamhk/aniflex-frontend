@@ -49,7 +49,7 @@ export default function VideoEpisodeCard(props: VideoCardProps) {
   const dd = date.getDate();
 
   return (
-    <Card elevation={isActive ? 5 : 0}>
+    <Card elevation={0} sx={{ backgroundColor: isActive ? 'action.selected' : 'transparent' }}>
       <CardActionArea>
         <Link
           href={hrefOptions}
@@ -70,7 +70,8 @@ export default function VideoEpisodeCard(props: VideoCardProps) {
             sx={{
               flexGrow: 1,
               px: '15px',
-              py: '5px',
+              py: '4px',
+              height: '84.38px'
             }}
           >
             <Typography
@@ -85,7 +86,7 @@ export default function VideoEpisodeCard(props: VideoCardProps) {
               variant='h6'
               sx={{
                 color: 'text.primary',
-                mb: '4px',
+                mb: '2px',
                 overflow: 'hidden',
                 textOverflow: 'ellipsis',
                 display: '-webkit-box',

@@ -36,8 +36,8 @@ export default function Home(props: HomeProps) {
         <Typography variant='h2' sx={{ mt: 6, mb: 2 }}>熱門動畫</Typography>
         {popularSeries.length > 0 ? (
           <Grid container spacing={2}>
-            {popularSeries.map((series) => (
-              <Grid item xs={12} sm={6} md={4} lg={3} key={series.id}>
+            {popularSeries.map((series, i) => (
+              <Grid item xs={12} sm={6} md={4} lg={3} key={i}>
                 <VideoCard {...series} />
               </Grid>
             ))}
@@ -65,7 +65,7 @@ export async function getServerSideProps() {
     }));
     return {
       props: {
-        popularSeries: series,
+        popularSeries: [...series, ...series, ...series, ...series],
       }
     }
   } catch (err) {

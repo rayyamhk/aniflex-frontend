@@ -12,7 +12,7 @@ export default function MyDocument(props: { emotionStyleTags: JSX.Element[] }) {
         <meta name='emotion-insertion-point' content='' />
         {props.emotionStyleTags}
       </Head>
-      <body className='dark-theme'>
+      <body>
         <Main />
         <NextScript />
       </body>

@@ -24,12 +24,11 @@ export default function useLocalStorage<T>(key: string, initialValue: T): [T, (v
   const setValue = (value: T) => {
     try {
       setStoredValue(value);
-      if (typeof window !== undefined) {
-        if (typeof initialValue === 'string') {
-          window.localStorage.setItem(key, value as string);
-        } else {
-          window.localStorage.setItem(key, JSON.stringify(value));
-        }
+      if (typeof window === 'undefined') return;
+      if (typeof initialValue === 'string') {
+        window.localStorage.setItem(key, value as string);
+      } else {
+        window.localStorage.setItem(key, JSON.stringify(value));
       }
     } catch (err) {
       console.error(err);

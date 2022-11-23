@@ -1,5 +1,6 @@
 import { useEffect, useRef } from 'react';
 import videojs, { VideoJsPlayer } from 'video.js';
+import styled from '@mui/material/styles/styled';
 import 'video.js/dist/video-js.css';
 
 type VideoPlayerProps = {
@@ -9,6 +10,20 @@ type VideoPlayerProps = {
   thumbnail: string,
   video: string,
 };
+
+// Avoid Core Web Vital CLS
+const VideoWrapper = styled('div')({
+  paddingBottom: '56.25%',
+  position: 'relative',
+});
+
+const VideoContainer = styled('div')({
+  position: 'absolute',
+  top: 0,
+  right: 0,
+  bottom: 0,
+  left: 0,
+});
 
 export default function VideoPlayer(props: VideoPlayerProps) {
   const {
@@ -87,9 +102,18 @@ export default function VideoPlayer(props: VideoPlayerProps) {
     playerRef.current.poster(thumbnail);
   }, [thumbnail, video, containerRef, playerRef]);
 
+  useEffect(() => {
+    if (process.env.NODE_ENV !== 'production') return;
+    fetch(`${process.env.NEXT_PUBLIC_API_HOST}/episodes`, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ id, episode }),
+    });
+  }, [id, episode]);
+
   return (
-    <div className={className} data-vjs-player>
-      <div ref={containerRef} />
-    </div>
+    <VideoWrapper className={className} data-vjs-player>
+      <VideoContainer ref={containerRef} />
+    </VideoWrapper>
   );
 }

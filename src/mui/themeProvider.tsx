@@ -1,15 +1,18 @@
-import React, { createContext } from 'react';
+import React, { createContext, useContext } from 'react';
 import { ThemeProvider as EmotionThemeProvider } from '@emotion/react';
 import {
   darkTheme,
   lightTheme,
 } from './theme';
-import useTheme, { theme } from '../hooks/useTheme';
+import useLocalStorage from '../hooks/useLocalStorage';
 
-export const ThemeContext = createContext<[theme, (value: theme) => void]>(['dark', () => {}]);
+type theme = 'light' | 'dark';
 
-export default function ThemeProvider({ children }: { children: React.ReactNode }) {
-  const [theme, setTheme] = useTheme('dark');
+const THEME_KEY = 'aniflex-theme';
+const ThemeContext = createContext<[theme, (value: theme) => void]>(['dark', () => {}]);
+
+export function ThemeProvider({ children, defaultTheme }: { children: React.ReactNode, defaultTheme: theme }) {
+  const [theme, setTheme] = useLocalStorage<theme>(THEME_KEY, defaultTheme);
   return (
     <ThemeContext.Provider value={[theme, setTheme]}>
       <EmotionThemeProvider theme={theme === 'dark' ? darkTheme : lightTheme}>
@@ -18,3 +21,7 @@ export default function ThemeProvider({ children }: { children: React.ReactNode 
     </ThemeContext.Provider>
   );
 };
+
+export default function useTheme() {
+  return useContext(ThemeContext);
+}

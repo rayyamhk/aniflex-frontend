@@ -7,7 +7,7 @@ import { styled } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
 import Link from '../Link';
 import Thumbnail from '../Thumbnail';
-import { ThemeContext } from '../../mui/themeProvider';
+import useTheme from '../../mui/themeProvider';
 
 type VideoCardProps = {
   id: string,
@@ -49,7 +49,7 @@ export default function VideoCard(props: VideoCardProps) {
     },
   };
 
-  const [theme] = useContext(ThemeContext);
+  const [theme] = useTheme();
   const isDarkMode = theme === 'dark';
 
   return (

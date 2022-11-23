@@ -1,4 +1,3 @@
-import { useContext } from 'react';
 import Image from 'next/image';
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import AppBar from '@mui/material/AppBar';
@@ -10,7 +9,7 @@ import Toolbar from '@mui/material/Toolbar';
 import Link from '../Link';
 import logo from '../../static/images/brand-light.png';
 import ResponsiveContainer from '../ResponsiveContainer';
-import { ThemeContext } from '../../mui/themeProvider';
+import useTheme from '../../mui/themeProvider';
 
 const Offset = styled('div')(({ theme }) => theme.mixins.toolbar);
 const MaterialUISwitch = styled(Switch)(({ checked }) => ({
@@ -61,7 +60,7 @@ const MaterialUISwitch = styled(Switch)(({ checked }) => ({
 }));
 
 export default function Header() {
-  const [theme, setTheme] = useContext(ThemeContext);
+  const [theme, setTheme] = useTheme();
   return (
     <>
       <AppBar position='fixed'>

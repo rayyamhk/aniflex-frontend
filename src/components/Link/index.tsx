@@ -10,7 +10,7 @@ const ModifiedNextLink = React.forwardRef<HTMLAnchorElement, ModifiedNextLinkPro
   <NextLink href={to} ref={ref} {...rest} />
 ));
 
-type LinkProps = Omit<MuiLinkProps, 'href'> & Pick<NextLinkProps, 'href'>;
+type LinkProps = Omit<MuiLinkProps, 'href'> & Pick<NextLinkProps, 'href' | 'locale'>;
 
 export default function Link(props: LinkProps) {
   const {

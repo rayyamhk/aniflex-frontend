@@ -55,7 +55,7 @@ export default function Thumbnail(props: ThumbnailProps) {
         blurDataURL='data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mN8/frJfwAJPgO7v0heZQAAAABJRU5ErkJggg=='
       />
       <Typography
-        variant='button'
+        variant='body1'
         sx={{
           color: 'rgba(255,255,255,0.85)',
           backgroundColor: 'rgba(0,0,0,0.5)',

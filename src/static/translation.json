@@ -1,0 +1,28 @@
+{
+  "en-US": {
+    "signin": "Sign in",
+    "language": "Language",
+    "lightmode": "Light Mode",
+    "darkmode": "Dark Mode",
+    "popular-animes": "Popular Animes",
+    "no-results": "No Results",
+    "views": "Views",
+    "serie-thumbnail-label": "Episodes {{count}}",
+    "serie-thumbnail-alt": "Thumbnail for {{title}}",
+    "episode-thumbnail-label": "Ep. {{episode}}",
+    "episode-thumbnail-alt": "Thumbnail for Ep. {{episode}}"
+  },
+  "zh-HK": {
+    "signin": "登入",
+    "language": "語言",
+    "lightmode": "日間模式",
+    "darkmode": "夜間模式",
+    "popular-animes": "熱門動畫",
+    "no-results": "暫時沒有",
+    "views": "觀看次數",
+    "serie-thumbnail-label": "共{{count}}集",
+    "serie-thumbnail-alt": "{{title}}縮圖",
+    "episode-thumbnail-label": "第{{episode}}集",
+    "episode-thumbnail-alt": "第{{episode}}集縮圖"
+  }
+}

@@ -6,6 +6,7 @@ import { styled } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
 import Link from '../Link';
 import Thumbnail from '../Thumbnail';
+import useTranslate from '../../hooks/useTranslate';
 
 const Views = styled('span')(({ theme }) => ({
   color: theme.palette.text.secondary,
@@ -38,6 +39,8 @@ export default function VideoEpisodeCard(props: VideoCardProps) {
     views,
   } = props;
 
+  const translate = useTranslate();
+
   const hrefOptions = {
     pathname: '/anime/[id]/[episode]',
     query: { id, episode },
@@ -58,11 +61,11 @@ export default function VideoEpisodeCard(props: VideoCardProps) {
         >
           <Box sx={{ flex: '0 0 150px' }}>
             <Thumbnail
-              label={`第${episode}集`}
+              label={translate('episode-thumbnail-label', { episode })}
               src={thumbnail}
               width={150}
               height={84.375}
-              alt={`第${episode}集縮圖`}
+              alt={translate('episode-thumbnail-alt', { episode })}
               rounded
             />
           </Box>

@@ -13,6 +13,10 @@ const nextConfig = {
     ],
     deviceSizes: [600, 900, 1200],
   },
+  i18n: {
+    locales: ['en-US', 'zh-HK'],
+    defaultLocale: 'en-US',
+  },
 }
 
 module.exports = nextConfig

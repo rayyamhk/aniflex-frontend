@@ -9,6 +9,7 @@ import { Serie } from '../types';
 import hero0 from '../static/images/hero-0.jpeg';
 import hero1 from '../static/images/hero-1.jpeg';
 import hero2 from '../static/images/hero-2.jpeg';
+import useTranslate from '../hooks/useTranslate';
 
 type HomeProps = {
   popularSeries: Serie[],
@@ -18,6 +19,8 @@ export default function Home(props: HomeProps) {
   const {
     popularSeries,
   } = props;
+
+  const translate = useTranslate();
 
   return (
     <Layout>
@@ -33,7 +36,7 @@ export default function Home(props: HomeProps) {
             hero2,
           ]}
         />
-        <Typography variant='h2' sx={{ mt: 6, mb: 2 }}>熱門動畫</Typography>
+        <Typography variant='h2' sx={{ mt: 6, mb: 2 }}>{translate('popular-animes')}</Typography>
         {popularSeries.length > 0 ? (
           <Grid container spacing={2}>
             {popularSeries.map((series, i) => (
@@ -43,7 +46,7 @@ export default function Home(props: HomeProps) {
             ))}
           </Grid>
         ) : (
-          <Typography variant='body2'>暫時沒有</Typography>
+          <Typography variant='body2'>{translate('no-results')}</Typography>
         )}
       </ResponsiveContainer>
     </Layout>

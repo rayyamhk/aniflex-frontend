@@ -1,4 +1,3 @@
-import { useContext } from 'react';
 import Card from '@mui/material/Card';
 import CardActionArea from '@mui/material/CardActionArea';
 import CardContent from '@mui/material/CardContent';
@@ -8,6 +7,7 @@ import Typography from '@mui/material/Typography';
 import Link from '../Link';
 import Thumbnail from '../Thumbnail';
 import useTheme from '../../mui/themeProvider';
+import useTranslate from '../../hooks/useTranslate';
 
 type VideoCardProps = {
   id: string,
@@ -50,6 +50,7 @@ export default function VideoCard(props: VideoCardProps) {
   };
 
   const [theme] = useTheme();
+  const translate = useTranslate();
   const isDarkMode = theme === 'dark';
 
   return (
@@ -63,9 +64,9 @@ export default function VideoCard(props: VideoCardProps) {
           underline='none'
         >
           <Thumbnail
-            label={`共${episodes}集`}
+            label={translate('serie-thumbnail-label', { count: episodes })}
             src={thumbnail}
-            alt={`${title}縮圖`}
+            alt={translate('serie-thumbnail-alt', { title })}
             fill
             sizes='
               (min-width: 600px) 283.75px,

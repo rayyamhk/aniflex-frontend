@@ -16,6 +16,7 @@ import {
   Response,
   Serie,
 } from '../../../types';
+import useTranslate from '../../../hooks/useTranslate';
 
 const EpisodesContainer = styled('ol')(({ theme }) => ({
   padding: 0,
@@ -75,6 +76,7 @@ export default function AnimePage(props: AnimePageProps) {
 
   const [popularSeries, setPopularSeries] = useState<Serie[]>([]);
   const [loading, setLoading] = useState(true);
+  const translate = useTranslate();
 
   // popular series only fetched once
   useEffect(() => {
@@ -175,7 +177,7 @@ export default function AnimePage(props: AnimePageProps) {
               component='span'
               sx={{ color: 'text.secondary' }}
             >
-              觀看次數: {views}
+              {translate('views')}: {views}
             </Typography>
             <Typography
               variant='body2'
@@ -188,7 +190,7 @@ export default function AnimePage(props: AnimePageProps) {
             {renderEpisodes()}
           </Grid>
         </Grid>
-        <Typography variant='h2' sx={{ mt: 6, mb: 2 }}>熱門動畫</Typography>
+        <Typography variant='h2' sx={{ mt: 6, mb: 2 }}>{translate('popular-animes')}</Typography>
         <MemoizedPopularSeries
           loading={loading}
           series={popularSeries}
@@ -209,13 +211,13 @@ export async function getStaticPaths() {
     const json = await res.json();
     if (json.status !== 'success') throw new Error(json.message);
     const episodes = json.data as Episode[];
+    const paths: { params: any, locale: string }[] = [];
+    episodes.forEach(({ id, episode }) => {
+      paths.push({ params: { id, episode: episode.toString() }, locale: 'en-US' });
+      paths.push({ params: { id, episode: episode.toString() }, locale: 'zh-HK' });
+    });
     return {
-      paths: episodes.map(({ id, episode }) => ({
-        params: {
-          id,
-          episode: episode.toString(),
-        },
-      })),
+      paths,
       fallback: false,
     };
   } catch (err) {
@@ -267,6 +269,7 @@ export async function getStaticProps(context: any) {
 }
 
 function PopularSeries({ loading, series }: { loading: boolean, series: Serie[] }) {
+  const translate = useTranslate();
   if (loading) {
     return (
       <Grid container spacing={2}>
@@ -292,5 +295,5 @@ function PopularSeries({ loading, series }: { loading: boolean, series: Serie[] 
       </Grid>
     );
   }
-  return <Typography variant='body2'>暫時沒有</Typography>
+  return <Typography variant='body2'>{translate('no-results')}</Typography>
 }

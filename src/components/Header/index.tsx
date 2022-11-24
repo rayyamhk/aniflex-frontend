@@ -14,10 +14,11 @@ import Typography from '@mui/material/Typography';
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import GTranslateIcon from '@mui/icons-material/GTranslate';
 import Link from '../Link';
-import logo from '../../static/images/brand-light.png';
+import AuthDialog from '../AuthDialog';
 import ResponsiveContainer from '../ResponsiveContainer';
 import useTheme from '../../mui/themeProvider';
 import useTranslate from '../../hooks/useTranslate';
+import logo from '../../static/images/brand-light.png';
 
 const Offset = styled('div')(({ theme }) => theme.mixins.toolbar);
 const MaterialUISwitch = styled(Switch)(({ checked }) => ({
@@ -69,13 +70,16 @@ const MaterialUISwitch = styled(Switch)(({ checked }) => ({
 
 export default function Header() {
   const [theme, setTheme] = useTheme();
-  const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>();
+  const [langAnchorEl, setLangAnchorEl] = useState<HTMLButtonElement | null>();
+  const [authOpen, setAuthOpen] = useState(false);
   const { pathname, query, locale } = useRouter();
   const translate = useTranslate();
 
   const hrefOption = { pathname, query };
-  const onOpen = (e: React.MouseEvent<HTMLButtonElement>) => setAnchorEl(e.currentTarget);  
-  const onClose = () => setAnchorEl(null);
+  const onLangOpen = (e: React.MouseEvent<HTMLButtonElement>) => setLangAnchorEl(e.currentTarget);  
+  const onLangClose = () => setLangAnchorEl(null);
+  const onAuthOpen = () => setAuthOpen(true);
+  const onAuthClose = () => setAuthOpen(false);
   
   return (
     <>
@@ -109,19 +113,19 @@ export default function Header() {
                 id='i18n-btn'
                 aria-controls='lang-menu'
                 aria-haspopup='true'
-                aria-expanded={!!anchorEl ? 'true' : 'false'}
+                aria-expanded={!!langAnchorEl ? 'true' : 'false'}
                 size='large'
                 sx={{ color: 'common.white' }}
-                onClick={onOpen}
+                onClick={onLangOpen}
               >
                 <GTranslateIcon />
               </IconButton>
             </Tooltip>
             <Menu
               id='lang-menu'
-              anchorEl={anchorEl}
-              open={!!anchorEl}
-              onClose={onClose}
+              anchorEl={langAnchorEl}
+              open={!!langAnchorEl}
+              onClose={onLangClose}
               MenuListProps={{
                 'aria-labelledby': 'i18n-btn',
               }}
@@ -135,27 +139,35 @@ export default function Header() {
               }}
             >
               <MenuItem
-                onClick={onClose}
+                onClick={onLangClose}
                 sx={{ backgroundColor: locale === 'en-US' ? 'action.hover' : 'transparent' }}
               >
                 <Link href={hrefOption} locale='en-US' underline='none'>
-                  <Typography>🇺🇸 English</Typography>
+                  <Typography variant='body1' sx={{ color: 'text.primary' }}>🇺🇸 English</Typography>
                 </Link>
               </MenuItem>
               <MenuItem
-                onClick={onClose}
+                onClick={onLangClose}
                 sx={{ backgroundColor: locale === 'zh-HK' ? 'action.hover' : 'transparent' }}
               >
                 <Link href={hrefOption} locale='zh-HK' underline='none'>
-                  <Typography>🇭🇰 中文</Typography>
+                  <Typography variant='body1' sx={{ color: 'text.primary' }}>🇭🇰 中文</Typography>
                 </Link>
               </MenuItem>
             </Menu>
             <Tooltip title={translate('signin')}>
-              <IconButton size='large' sx={{ color: 'common.white' }}>
+              <IconButton
+                size='large'
+                sx={{ color: 'common.white' }}
+                onClick={onAuthOpen}
+              >
                 <AccountCircle />
               </IconButton>
             </Tooltip>
+            <AuthDialog
+              open={authOpen}
+              onClose={onAuthClose}
+            />
           </Toolbar>
         </ResponsiveContainer>
       </AppBar>

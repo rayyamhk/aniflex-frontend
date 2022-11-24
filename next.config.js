@@ -15,7 +15,8 @@ const nextConfig = {
   },
   i18n: {
     locales: ['en-US', 'zh-HK'],
-    defaultLocale: 'en-US',
+    defaultLocale: 'zh-HK',
+    localeDetection: false,
   },
 }
 

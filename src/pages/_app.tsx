@@ -4,7 +4,9 @@ import { CacheProvider } from '@emotion/react';
 import { EmotionCache } from '@emotion/cache';
 import CssBaseline from '@mui/material/CssBaseline';
 import createEmotionCache from '../mui/createEmotionCache';
-import { ThemeProvider } from '../mui/themeProvider';
+import { ThemeProvider } from '../hooks/useTheme';
+import { AuthProvider } from '../hooks/useAuth';
+import ErrorBoundary from '../components/ErrorBoundary';
 
 const clientSideEmotionCache = createEmotionCache();
 
@@ -20,8 +22,12 @@ export default function App(props: MuiAppProps) {
         <meta name='viewport' content='initial-scale=1, width=device-width' />
       </Head>
         <ThemeProvider defaultTheme='dark'>
-          <CssBaseline />
-          <Component {...pageProps} />
+          <AuthProvider>
+            <CssBaseline />
+            <ErrorBoundary>
+              <Component {...pageProps} />
+            </ErrorBoundary>
+          </AuthProvider>
         </ThemeProvider>
     </CacheProvider>
   );

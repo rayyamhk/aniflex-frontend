@@ -1,24 +1,26 @@
-import { useState } from 'react';
+import React, { Children, ElementType, ReactNode, useState } from 'react';
 import { useRouter } from 'next/router';
 import Image from 'next/image';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import IconButton from '@mui/material/IconButton';
+import LoginIcon from '@mui/icons-material/Login';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
+import MuiLink from '@mui/material/Link';
 import { styled } from '@mui/material/styles';
 import Switch from '@mui/material/Switch';
 import Toolbar from '@mui/material/Toolbar';
 import Tooltip from '@mui/material/Tooltip';
-import Typography from '@mui/material/Typography';
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import GTranslateIcon from '@mui/icons-material/GTranslate';
 import Link from '../Link';
 import AuthDialog from '../AuthDialog';
 import ResponsiveContainer from '../ResponsiveContainer';
-import useTheme from '../../mui/themeProvider';
+import useTheme from '../../hooks/useTheme';
 import useTranslate from '../../hooks/useTranslate';
 import logo from '../../static/images/brand-light.png';
+import useAuth from '../../hooks/useAuth';
 
 const Offset = styled('div')(({ theme }) => theme.mixins.toolbar);
 const MaterialUISwitch = styled(Switch)(({ checked }) => ({
@@ -69,17 +71,17 @@ const MaterialUISwitch = styled(Switch)(({ checked }) => ({
 }));
 
 export default function Header() {
-  const [theme, setTheme] = useTheme();
-  const [langAnchorEl, setLangAnchorEl] = useState<HTMLButtonElement | null>();
   const [authOpen, setAuthOpen] = useState(false);
   const { pathname, query, locale } = useRouter();
+  const [theme, setTheme] = useTheme();
   const translate = useTranslate();
+  const { user, signOut } = useAuth();
 
-  const hrefOption = { pathname, query };
-  const onLangOpen = (e: React.MouseEvent<HTMLButtonElement>) => setLangAnchorEl(e.currentTarget);  
-  const onLangClose = () => setLangAnchorEl(null);
+  const i18nHref = { pathname, query };
+
   const onAuthOpen = () => setAuthOpen(true);
   const onAuthClose = () => setAuthOpen(false);
+  const onSignOut = () => signOut();
   
   return (
     <>
@@ -108,70 +110,129 @@ export default function Header() {
                 onChange={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
               />
             </Tooltip>
-            <Tooltip title={translate('language')}>
-              <IconButton
-                id='i18n-btn'
-                aria-controls='lang-menu'
-                aria-haspopup='true'
-                aria-expanded={!!langAnchorEl ? 'true' : 'false'}
-                size='large'
-                sx={{ color: 'common.white' }}
-                onClick={onLangOpen}
-              >
-                <GTranslateIcon />
-              </IconButton>
-            </Tooltip>
-            <Menu
-              id='lang-menu'
-              anchorEl={langAnchorEl}
-              open={!!langAnchorEl}
-              onClose={onLangClose}
-              MenuListProps={{
-                'aria-labelledby': 'i18n-btn',
-              }}
-              anchorOrigin={{
-                vertical: 'bottom',
-                horizontal: 'center',
-              }}
-              transformOrigin={{
-                vertical: 'top',
-                horizontal: 'center',
-              }}
+            <IconMenu
+              activeIndex={locale === 'en-US' ? 0 : 1}
+              Icon={GTranslateIcon}
+              id='i18n'
+              title={translate('language')}
             >
-              <MenuItem
-                onClick={onLangClose}
-                sx={{ backgroundColor: locale === 'en-US' ? 'action.hover' : 'transparent' }}
+              <Link
+                href={i18nHref}
+                locale='en-US'
+                underline='none'
+                variant='body1'
+                sx={{ color: 'text.primary' }}
               >
-                <Link href={hrefOption} locale='en-US' underline='none'>
-                  <Typography variant='body1' sx={{ color: 'text.primary' }}>🇺🇸 English</Typography>
+                🇺🇸 English
+              </Link>
+              <Link
+                href={i18nHref}
+                locale='zh-HK'
+                underline='none'
+                variant='body1'
+                sx={{ color: 'text.primary' }}
+              >
+                🇭🇰 中文
+              </Link>
+            </IconMenu>
+            {!user && (
+              <Tooltip title={translate('signin')}>
+                <IconButton
+                  size='large'
+                  sx={{ color: 'common.white' }}
+                  onClick={onAuthOpen}
+                >
+                  {<LoginIcon />}
+                </IconButton>
+              </Tooltip>
+            )}
+            {!user && (
+              <AuthDialog
+                open={authOpen}
+                onClose={onAuthClose}
+              />
+            )}
+            {user && (
+              <IconMenu
+                Icon={AccountCircle}
+                id='user'
+                title={translate('user-options')}
+              >
+                <Link
+                  href='/dashboard'
+                  underline='none'
+                  variant='body1'
+                  sx={{ color: 'text.primary' }}
+                >
+                  {translate('user-dashboard')}
                 </Link>
-              </MenuItem>
-              <MenuItem
-                onClick={onLangClose}
-                sx={{ backgroundColor: locale === 'zh-HK' ? 'action.hover' : 'transparent' }}
-              >
-                <Link href={hrefOption} locale='zh-HK' underline='none'>
-                  <Typography variant='body1' sx={{ color: 'text.primary' }}>🇭🇰 中文</Typography>
-                </Link>
-              </MenuItem>
-            </Menu>
-            <Tooltip title={translate('signin')}>
-              <IconButton
-                size='large'
-                sx={{ color: 'common.white' }}
-                onClick={onAuthOpen}
-              >
-                <AccountCircle />
-              </IconButton>
-            </Tooltip>
-            <AuthDialog
-              open={authOpen}
-              onClose={onAuthClose}
-            />
+                <MuiLink
+                  component='button'
+                  underline='none'
+                  variant='body1'
+                  sx={{ color: 'text.primary' }}
+                  onClick={onSignOut}
+                >
+                  {translate('signout')}
+                </MuiLink>
+              </IconMenu>
+            )}
           </Toolbar>
         </ResponsiveContainer>
       </AppBar>
       <Offset sx={{ mb: 2 }} />
+    </>
+  );
+}
+
+function IconMenu({ activeIndex, children, Icon, id, title }: { activeIndex?: number, children: ReactNode, Icon: ElementType, id: string, title?: string }) {
+  const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>();
+  const onOpen = (e: React.MouseEvent<HTMLButtonElement>) => setAnchorEl(e.currentTarget);  
+  const onClose = () => setAnchorEl(null);
+  const btnId = `${id}-btn`;
+  const menuId = `${id}-menu`;
+  return (
+    <>
+      <Tooltip title={title}>
+        <IconButton
+          id={btnId}
+          aria-controls={menuId}
+          aria-haspopup='true'
+          aria-expanded={!!anchorEl ? 'true' : 'false'}
+          size='large'
+          sx={{ color: 'common.white' }}
+          onClick={onOpen}
+        >
+          <Icon />
+        </IconButton>
+      </Tooltip>
+      <Menu
+        id={menuId}
+        anchorEl={anchorEl}
+        open={!!anchorEl}
+        onClose={onClose}
+        MenuListProps={{
+          'aria-labelledby': btnId,
+        }}
+        anchorOrigin={{
+          vertical: 'bottom',
+          horizontal: 'center',
+        }}
+        transformOrigin={{
+          vertical: 'top',
+          horizontal: 'center',
+        }}
+      >
+        {Children.toArray(children).map((child, i) => (
+          <MenuItem
+            onClick={onClose}
+            sx={{ backgroundColor: activeIndex === i ? 'action.hover' : 'transparent' }}
+            key={i}
+          >
+            {child}
+          </MenuItem>
+        ))}
+      </Menu>
     </>
   );
 }

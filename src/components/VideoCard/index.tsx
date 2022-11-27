@@ -6,7 +6,7 @@ import { styled } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
 import Link from '../Link';
 import Thumbnail from '../Thumbnail';
-import useTheme from '../../mui/themeProvider';
+import useTheme from '../../hooks/useTheme';
 import useTranslate from '../../hooks/useTranslate';
 
 type VideoCardProps = {

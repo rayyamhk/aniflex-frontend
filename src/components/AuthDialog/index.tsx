@@ -8,10 +8,8 @@ import DialogTitle from '@mui/material/DialogTitle';
 import LoadingButton from '@mui/lab/LoadingButton';
 import useTranslate from '../../hooks/useTranslate';
 import { InputField, RememberMeCheckbox } from './components';
-
-const EMAIL_REGEX = /^[a-z0-9!#$%&'*+-/=?^_`{|}~]+(?:\.[a-z0-9!#$%&'*+-/=?^_`{|}~])*@[a-z0-9][-a-z0-9]*(?:\.[-a-z0-9]+)*\.[-a-z0-9]*[a-z0-9]$/i;
-const USERNAME_REGEX = /^(?!.*\.\.)(?!.*\.$)[^\W][\w.]{0,15}$/;
-const PASSWORD_REGEX = /(?=.*\d)(?=.*[a-z])(?=.*[A-Z])/;
+import useAuth from '../../hooks/useAuth';
+import { EMAIL_REGEX, PASSWORD_REGEX } from '../../constants';
 
 const defaultSigninState = {
   email: '',
@@ -21,7 +19,6 @@ const defaultSigninState = {
 
 const defaultSignupState = {
   email: '',
-  username: '',
   password: '',
   confirmedPassword: '',
 };
@@ -41,7 +38,7 @@ export default function AuthDialog(props: AuthDialogProps) {
     open,
   } = props;
   const translate = useTranslate();
-
+  const { signIn, signUp } = useAuth();
   const [action, setAction] = useState<Action>('signin');
   const [signinState, setSigninState] = useState(defaultSigninState);
   const [signupState, setSignupState] = useState(defaultSignupState);
@@ -72,10 +69,6 @@ export default function AuthDialog(props: AuthDialogProps) {
     if (action === 'signin') setSigninState({ ...signinState, email });
     else setSignupState({ ...signupState, email });
   };
-  const onUsernameChange = (e: ChangeEvent) => {
-    if (action === 'signin') return;
-    setSignupState({ ...signupState, username: e.target.value });
-  }
   const onPasswordChange = (e: ChangeEvent) => {
     const password = e.target.value;
     if (action === 'signin') setSigninState({ ...signinState, password });
@@ -90,14 +83,17 @@ export default function AuthDialog(props: AuthDialogProps) {
     const {
       email,
       password,
+      rememberMe,
     } = signinState;
     if (!email || !password) return setErrorMessage(translate('required-fields-missing'));
     if (!EMAIL_REGEX.test(email) || password.length < 8 || !PASSWORD_REGEX.test(password))
       return setErrorMessage(translate('authentication-failed'));
+    setLoading(true);
     try {
-      setLoading(true);
-    } catch (err) {
-      setErrorMessage(err as string);
+      await signIn(email, password, rememberMe);
+      onClose();
+    } catch (err: any) {
+      setErrorMessage(err.message as string);
     } finally {
       setLoading(false);
     }
@@ -105,20 +101,19 @@ export default function AuthDialog(props: AuthDialogProps) {
   const onSignup = async () => {
     const {
       email,
-      username,
       password,
       confirmedPassword,
     } = signupState;
-    if (!email || !username || !password || !confirmedPassword) return setErrorMessage(translate('required-fields-missing'));
+    if (!email || !password || !confirmedPassword) return setErrorMessage(translate('required-fields-missing'));
     if (!EMAIL_REGEX.test(email)) return setErrorMessage(translate('invalid-email'));
-    if (!USERNAME_REGEX.test(username)) return setErrorMessage(translate('username-requirements'));
     if (password.length < 8 || !PASSWORD_REGEX.test(password)) return setErrorMessage(translate('password-requirements'));
     if (confirmedPassword !== password) return setErrorMessage(translate('password-not-match'));
-    setAction('signin');
-    setSigninState({ email, password: '', rememberMe: false });
-    setErrorMessage(null);
+    setLoading(true);
     try {
-      setLoading(true);
+      await signUp(email, password);
+      setAction('signin');
+      setSigninState({ email, password: '', rememberMe: false });
+      setErrorMessage(null);
     } catch (err) {
       setErrorMessage(err as string);
     } finally {
@@ -151,15 +146,6 @@ export default function AuthDialog(props: AuthDialogProps) {
           type='email'
           onChange={onEmailChange}
         />
-        {action !== 'signin' && (
-          <InputField
-            label={translate('username')}
-            value={signupState.username}
-            helperText={translate('username-requirements')}
-            type='text'
-            onChange={onUsernameChange}
-          />
-        )}
         <InputField
           label={translate('password')}
           helperText={action === 'signin' ? undefined : translate('password-requirements')}
